@@ -53,7 +53,7 @@ bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec st
+bindsym $mod+Return exec alacritty
 # bindsym $mod+Shift+Return exec st --role floating_terminal
 
 # start a terminal
