@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-xrdb -merge /home/rahmat/.config/Xresources
-exec dbus-launch i3
-#exec dbus-launch startxfce4
-#exec dbus-launch dwm
-# exec dbus-launch startlxqt
+# Executed by startx (run your window manager from here)
+xrdb -load ~/.Xresources
+# pulseaudio
+exec i3
+# audio

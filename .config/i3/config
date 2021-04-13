@@ -6,65 +6,79 @@ set $mod Mod4
 font pango:monospace 10
 
 # Run PulseAudio
-exec --no-startup-id pulseaudio -D
+# exec --no-startup-id pulseaudio -D
 
 # Sleep
-exec --no-startup-id xautolock -time 30 -locker "xset dpms force off;slock;gpg-connect-agent reloadagent /bye"
+#exec --no-startup-id xautolock -time 30 -locker "xset dpms force off;slock;gpg-connect-agent reloadagent /bye"
 
 # Tap to click on Touchpad
-exec --no-startup-id xinput set-prop 11 "libinput Tapping Enabled" 1
+exec --no-startup-id xinput --set-prop 12 300 1
+
+# Notification Deamon
+exec --no-startup-id dunst
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 exec --no-startup-id nm-applet
 
 # Music Daemon
-exec --no-startup-id mod
+exec --no-startup-id mpd
 
 # Composite Manager
-exec --no-startup-id xcompmgr
+exec --no-startup-id picom
 
 # AutoStart Wallpaper
-exec --no-startup-id setbg
+exec --no-startup-id nitrogen --restore
 
 # AutoStart polkit
-exec --no-startup-id lxpolkit
+exec --no-startup-id /usr/lib/xfce-polkit/xfce-polkit
 
 # Change Capslock to Escape
 exec --no-startup-id setxkbmap -option caps:escape
+
+# AutoStart Flameshot
+exec --no-startup-id flameshot
+
+# AutoStart bar
+exec_always --no-startup-id sh ~/.config/polybar/launch.sh --blocks
 
 # Speed up your Keyboard
 exec --no-startup-id xset r rate 300 50
 
 # fix Brightness
-exec --no-startup-id xbacklight -set 15
+exec --no-startup-id brightnessctl s 50
 
 # Clipboard Manager
-exec --no-startup-id clipmenud
+exec --no-startup-id copyq
+
+# Hide mouse when idle
+exec --no-startup-id unclutter --timeout 3
+
 # Use pactl to adjust volume in PulseAudio.
-bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --change-volume +5 && pkill -RTMIN+10 i3blocks
-bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --change-volume -5 && pkill -RTMIN+10 i3blocks
-bindsym XF86AudioMute exec --no-startup-id pamixer -t && pkill -RTMIN+10 i3blocks
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --increase 5
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --decrease 5
+bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute
 
 # Use xbacklight to adjust Brightness
-bindsym XF86MonBrightnessUp exec --no-startup-id xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 5
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set 5%+
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec alacritty
-# bindsym $mod+Shift+Return exec st --role floating_terminal
+bindsym $mod+Shift+Return exec alacritty -t floating
 
 # start a terminal
-bindsym $mod+p exec clipmenu -p \"Copy\"
-bindsym $mod+Shift+p exec clipdel -d \".\"
+bindsym $mod+p exec copyq show
 
 # kill focused window
 bindsym $mod+q kill
+bindsym $mod+Shift+q exec rofi-kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+bindsym $mod+d exec --no-startup-id launcher.sh
+bindsym $mod+Shift+d exec --no-startup-id rofi -show run
 
 # change focus
 bindsym $mod+h focus left
@@ -119,8 +133,11 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # screenshot
-bindsym Print exec dmenu-prtsc
+bindsym Print exec flameshot full -c
 bindsym $mod+Print exec flameshot gui
+
+# Helper
+bindsym $mod+Shift+slash exec keybind-helper
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -189,14 +206,19 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+Escape exec dmenu-power
-bindsym $mod+Shift+Delete exec i3-msg exit
+# Enable Floating Mode for Specific Programs
+for_window [class="copyq"] floating enable border normal 1
+for_window [class="Alacritty" title="floating"] floating enable border normal 1
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bindsym $mod+Shift+b bar mode toggle
-bar {
-        status_command i3blocks
-        position top
-}
+# class                 border  bground text    indicator child_border
+client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
+client.focused_inactive #44475A #44475A #F8F8F2 #44475A   #44475A
+client.unfocused        #282A36 #282A36 #BFBFBF #282A36   #282A36
+client.urgent           #44475A #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #282A36 #282A36 #F8F8F2 #282A36   #282A36
+
+#
+# client.background       #F8F8F2
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+Escape exec powermenu.sh
+bindsym $mod+Shift+Delete exec i3-msg exit
