@@ -139,8 +139,9 @@ bindsym $mod+Print exec flameshot gui
 # Helper
 bindsym $mod+Shift+slash exec keybind-helper
 
-# focus the child container
-#bindsym $mod+d focus child
+# Bar Toggle(polybar)
+bindsym $mod+b exec polybar-msg cmd show
+bindsym $mod+Shift+b exec polybar-msg cmd hide
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -178,6 +179,22 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Window Container Border Settings
+# syntax: new_window normal|none|pixel
+new_window pixel 2
+
+# For Direct Border Changing with Keyboard Shortcut
+bindsym $mod+Shift+z border normal 0
+bindsym $mod+z       border normal 2
+bindsym $mod+Shift+x border pixel  2
+bindsym $mod+x       border none
+
+# Assign Startup Application to Specific Workspace
+assign [class="Firefox"] $ws1
+assign [class="Brave-browser"] $ws1
+assign [class="TelegramDesktop"] $ws9
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -208,7 +225,8 @@ bindsym $mod+r mode "resize"
 
 # Enable Floating Mode for Specific Programs
 for_window [class="copyq"] floating enable border normal 1
-for_window [class="Alacritty" title="floating"] floating enable border normal 1
+for_window [class="Pavucontrol"] floating enable border normal 1
+for_window [class="Alacritty" title="floating"] floating enable border pixel 2
 
 # class                 border  bground text    indicator child_border
 client.focused          #6272A4 #6272A4 #F8F8F2 #6272A4   #6272A4
