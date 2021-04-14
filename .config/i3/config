@@ -12,7 +12,7 @@ font pango:monospace 10
 #exec --no-startup-id xautolock -time 30 -locker "xset dpms force off;slock;gpg-connect-agent reloadagent /bye"
 
 # Tap to click on Touchpad
-exec --no-startup-id xinput --set-prop 12 300 1
+exec --no-startup-id xinput --set-prop 12 306 1
 
 # Notification Deamon
 exec --no-startup-id dunst
@@ -53,6 +53,10 @@ exec --no-startup-id copyq
 # Hide mouse when idle
 exec --no-startup-id unclutter --timeout 3
 
+# Multitouch gesture
+exec --no-startup-id libinput-gestures
+
+exec --no-startup-id unclutter --timeout 3
 # Use pactl to adjust volume in PulseAudio.
 bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --increase 5
 bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --decrease 5
